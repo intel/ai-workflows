@@ -80,7 +80,7 @@ docker run \
 [Release Notes]()<br>
 
 ### **Code Sources**
-[Dockerfile](https://github.com/intel/ai-workflows/blob/v0.1.0/pipelines/language_modeling/pytorch/bert_large/training/Dockerfile.hugging-face-dlsa)<br>
+[Dockerfile](https://github.com/intel/ai-workflows/blob/v0.1.0/language_modeling/pytorch/bert_large/training/Dockerfile.hugging-face-dlsa)<br>
 [Report Issue](https://community.intel.com/t5/Intel-Optimized-AI-Frameworks/bd-p/optimized-ai-frameworks)<br>
 
 ## **License Agreement**

@@ -71,7 +71,7 @@ docker run \
 [Release Notes](https://github.com/intel/vision-based-transfer-learning-and-inference/releases/tag/v1.0.0)<br>
 
 ### **Code Sources**
-[Dockerfile](https://github.com/intel/ai-workflows/blob/v0.1.0/pipelines/transfer_learning/tensorflow/resnet50/training/Dockerfile.vision-transfer-learning)<br>
+[Dockerfile](https://github.com/intel/ai-workflows/blob/v0.1.0/transfer_learning/tensorflow/resnet50/training/Dockerfile.vision-transfer-learning)<br>
 [Report Issue](https://community.intel.com/t5/Intel-Optimized-AI-Frameworks/bd-p/optimized-ai-frameworks)<br>
 
 ## **License Agreement**

@@ -1,4 +1,4 @@
-# AI Worfklows Infrastructure for Intel® architecture -- DRAFT
+# AI Workflows Infrastructure for Intel® Architecture
 
 ## Description
 On this page you will find details and instructions on how to set up an environment that supports Intel's AI Pipelines container build and test infrastructure.
@@ -24,11 +24,6 @@ $ docker compose version
 Docker Compose version v2.7.0
 ```
 
-## Development Container
-Rather than installing the dependencies above on a bare-metal system, a base development container with the relevant dependencies for execution of MLOps validation can be built:
-
-```docker build -f ./.github/utils/Dockerfile.compose .```
-
 ## Build and Run Workflows
 Each pipeline will contain specific requirements and instructions for how to provide its specific dependencies and what customization options are possible. Generally, pipelines are run with the following format:
 
@@ -45,8 +40,7 @@ Where `KEY` and `VALUE` pairs are environment variables that can be used to cust
 |Language Modeling|PyTorch*|[Training](./language_modeling/pytorch/bert_large/training/)|
 |Vision Based Transfer Learning|TensorFlow|[Training](./transfer_learning/tensorflow/resnet50/training/) \| [Inference](./transfer_learning/tensorflow/resnet50/inference/)|
 |Quantization Aware Training and Inference|OpenVINO™|[Quantization Aware Training(QAT)](https://github.com/intel/nlp-training-and-inference-openvino/tree/v1.0/question-answering-bert-qat)|
-|
-Habana® Gaudi® Processor Training and Inference using OpenVINO™ Toolkit for U-Net 2D Model|OpenVINO™|[Training and Inference](https://github.com/intel/cv-training-and-inference-openvino/tree/v1.0.0/gaudi-segmentation-unet-ptq)|
+|Habana® Gaudi® Processor Training and Inference using OpenVINO™ Toolkit for U-Net 2D Model|OpenVINO™|[Training and Inference](https://github.com/intel/cv-training-and-inference-openvino/tree/v1.0.0/gaudi-segmentation-unet-ptq)|
 
 
 ### Cleanup

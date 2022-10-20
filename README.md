@@ -1,4 +1,4 @@
-# AI Workflow Infrastructure for Intel® architecture
+# AI Worfklows Infrastructure for Intel® architecture -- DRAFT
 
 ## Description
 On this page you will find details and instructions on how to set up an environment that supports Intel's AI Pipelines container build and test infrastructure.
@@ -44,6 +44,10 @@ Where `KEY` and `VALUE` pairs are environment variables that can be used to cust
 |-|-|-|
 |Language Modeling|PyTorch*|[Training](./language_modeling/pytorch/bert_large/training/)|
 |Vision Based Transfer Learning|TensorFlow|[Training](./transfer_learning/tensorflow/resnet50/training/) \| [Inference](./transfer_learning/tensorflow/resnet50/inference/)|
+|Quantization Aware Training and Inference|OpenVINO™|[Quantization Aware Training(QAT)](https://github.com/intel/nlp-training-and-inference-openvino/tree/v1.0/question-answering-bert-qat)|
+|
+Habana® Gaudi® Processor Training and Inference using OpenVINO™ Toolkit for U-Net 2D Model|OpenVINO™|[Training and Inference](https://github.com/intel/cv-training-and-inference-openvino/tree/v1.0.0/gaudi-segmentation-unet-ptq)|
+
 
 ### Cleanup
 Each pipeline can remove all resources allocated by executing `make clean`.

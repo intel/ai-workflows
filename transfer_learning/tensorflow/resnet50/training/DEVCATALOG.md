@@ -1,4 +1,4 @@
-# **Vision Transfer Learning - Training**
+# **Vision-based Transfer Learning - Training -- DRAFT**
 
 ## **Description**
 This guide contains instruction on how to run reference end-to-end pipeline for transfer learning with Docker container. For detailed information about the workflow, go to [End-to-End Vision Transfer Learning](https://github.com/intel/vision-based-transfer-learning-and-inference) GitHub repository.

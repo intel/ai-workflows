@@ -1,11 +1,11 @@
-# **Vision Transfer Learning - Inference**
+# **Vision Transfer Learning - Inference -- DRAFT**
 
 ## **Description**
 This guide contains instruction on how to run reference end-to-end pipeline for transfer learning with Docker container. For detailed information about the workflow, go to [End-to-End Vision Transfer Learning](https://github.com/intel/vision-based-transfer-learning-and-inference) GitHub repository.
 
 ## **Pull Docker Image**
 ```
-docker pull intel/ai-workflows:vision-transfer-learning-inference
+docker pull intel/ai-workflows:vision-transfer-learning-inference 
 ```
 
 ## **Download Model**

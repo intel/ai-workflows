@@ -1,4 +1,4 @@
-# **Document Level Sentiment Analysis Using Hugging Face Transformers - Training**
+# **Document Level Sentiment Analysis Using Hugging Face Transformers - Training -- DRAFT**
 
 ## **Use Hugging Face API for Natural Language Processing Tasks**
 DLSA is Intel optimized representative End-to-end Fine-Tuning & Inference pipeline for Document level sentiment analysis using BERT model implemented with Hugging Face transformer API. For detailed information about the workflow, go to [Document Level Sentiment Analysis](https://github.com/intel/document-level-sentiment-analysis) GitHub repository.

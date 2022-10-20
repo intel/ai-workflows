@@ -1,0 +1,3 @@
+language_modeling/pytorch/bert_large/training/dlsa # Remove this to change submodule
+transfer_learning/tensorflow/resnet50/inference/transfer-learning-inference # Remove this to change submodule
+transfer_learning/tensorflow/resnet50/training/transfer-learning-training # Remove this to change submodule

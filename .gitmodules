@@ -1,0 +1,9 @@
+[submodule "language_modeling/pytorch/bert_large/training/dlsa"]
+	path = language_modeling/pytorch/bert_large/training/dlsa
+	url = https://github.com/intel/document-level-sentiment-analysis
+[submodule "transfer_learning/tensorflow/resnet50/inference/transfer-learning-inference"]
+	path = transfer_learning/tensorflow/resnet50/inference/transfer-learning-inference
+	url = https://github.com/intel/vision-based-transfer-learning-and-inference
+[submodule "transfer_learning/tensorflow/resnet50/training/transfer-learning-training"]
+	path = transfer_learning/tensorflow/resnet50/training/transfer-learning-training
+	url = https://github.com/intel/vision-based-transfer-learning-and-inference

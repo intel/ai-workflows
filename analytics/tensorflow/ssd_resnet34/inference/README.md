@@ -9,10 +9,13 @@ The workload aims to implement end-to-end video streamer pipeline involving medi
 ## **Project Structure**
 ```
 ├── video-streamer @ v1.0.0
+├── DEVCATALOG.md
 ├── Dockerfile.video-streamer
 ├── Makefile
 ├── README.md
-└── docker-compose.yml
+├── docker-compose.yml
+└── images
+    └── video-pipeline.png
 ```
 [*Makefile*](Makefile)
 

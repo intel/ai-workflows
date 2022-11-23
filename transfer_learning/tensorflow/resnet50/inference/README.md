@@ -3,7 +3,7 @@
 This document contains instructions on how to run Vision Transfer Learning e2e pipeline with make and docker compose.
 ## Project Structure 
 ```
-├── transfer-learning-inference @ v1.0.0
+├── transfer-learning-inference @ v1.0.1
 ├── DEVCATALOG.md
 ├── docker-compose.yml
 ├── Dockerfile.vision-transfer-learning

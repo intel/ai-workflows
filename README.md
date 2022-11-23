@@ -43,6 +43,8 @@ Where `KEY` and `VALUE` pairs are environment variables that can be used to cust
 |Video Streamer|TensorFlow|[Inference](./analytics/tensorflow/ssd_resnet34/inference/)|
 |Quantization Aware Training and Inference|OpenVINO™|[Quantization Aware Training(QAT)](https://github.com/intel/nlp-training-and-inference-openvino/tree/v1.0/question-answering-bert-qat)|
 |Habana® Gaudi® Processor Training and Inference using OpenVINO™ Toolkit for U-Net 2D Model|OpenVINO™|[Training and Inference](https://github.com/intel/cv-training-and-inference-openvino/tree/v1.0.0/gaudi-segmentation-unet-ptq)|
+|Wafer Insights|SKLearn|[Inference](./analytics/classical-ml/synthetic/inference/)|
+
 
 
 ### Cleanup

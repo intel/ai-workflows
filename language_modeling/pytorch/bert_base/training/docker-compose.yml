@@ -1,0 +1,21 @@
+services:
+  nlp-azure:
+    build:
+      args:
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ${no_proxy}
+      dockerfile: ./azureml/Dockerfile
+    command: sh -c "jupyter nbconvert --to python 1.0-intel-azureml-training.ipynb && python3 1.0-intel-azureml-training.py"
+    environment:
+      - http_proxy=${http_proxy}
+      - https_proxy=${https_proxy}
+      - no_proxy=${no_proxy}
+    image: ${FINAL_IMAGE_NAME}:training-ubuntu-20.04
+    network_mode: "host"
+    privileged: true
+    volumes:
+      - ./azureml/notebooks:/root/notebooks
+      - ./azureml/src:/root/src
+      - /${AZURE_CONFIG_FILE}:/root/config.json
+    working_dir: /root/notebooks

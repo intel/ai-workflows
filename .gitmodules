@@ -7,3 +7,12 @@
 [submodule "transfer_learning/tensorflow/resnet50/training/transfer-learning-training"]
 	path = transfer_learning/tensorflow/resnet50/training/transfer-learning-training
 	url = https://github.com/intel/vision-based-transfer-learning-and-inference
+[submodule "language_modeling/pytorch/bert_base/inference/azureml"]
+	path = language_modeling/pytorch/bert_base/inference/azureml
+	url = https://github.com/intel/Intel-NLP-workflow-for-Azure-ML.git
+[submodule "language_modeling/pytorch/bert_base/training/azureml"]
+	path = language_modeling/pytorch/bert_base/training/azureml
+	url = https://github.com/intel/Intel-NLP-workflow-for-Azure-ML.git
+[submodule "analytics/tensorflow/ssd_resnet34/inference/video-streamer"]
+	path = analytics/tensorflow/ssd_resnet34/inference/video-streamer
+	url = https://github.com/intel/video-streamer

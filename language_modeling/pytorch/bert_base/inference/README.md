@@ -6,7 +6,7 @@ This pipeline provides instructions on how to run inference using BERT Base mode
 
 ## **Project Structure**
 ```
-├── azureml @ v1.0
+├── azureml @ v1.0.1
 ├── Makefile
 ├── README.md
 └── docker-compose.yml

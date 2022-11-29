@@ -6,7 +6,7 @@ This pipeline provides instructions on how to train the BERT base model on infra
 
 ## **Project Structure**
 ```
-├── azureml @ v1.0
+├── azureml @ v1.0.1
 ├── Makefile
 ├── README.md
 └── docker-compose.yml

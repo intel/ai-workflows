@@ -15,7 +15,7 @@ The video streamer pipeline is designed to mimic real-time video analytics. Real
 * The workflow uses BF16/INT8 precision in SPR which speeds up the inference time using Intel® AMX, without noticeable loss in accuracy when compared to FP32 precision (using Intel® AVX-512).
 
 Video streamer data flow
-![](images/video-pipeline.png)
+![video-pipeline](https://user-images.githubusercontent.com/43555799/205149596-f5054457-ef29-46ba-82e2-a979828d2754.png)
 
 ## Get started
 ### **Prerequisites**
@@ -117,7 +117,7 @@ This controls the number of CPU cores to run in the whole pipeline.
 
 This controls TensorFlow thread settings. 
 * inter_op_parallelism: the number of threads used by independent non-blocking operations in TensorFlow.
-* intra_op_parallelism: execution of an individual operation can be parallelized on a pool of threads in TensorFlow. `intra_op_parallelism` contorls the maximum thread number of the pool.
+* intra_op_parallelism: execution of an individual operation can be parallelized on a pool of threads in TensorFlow. `intra_op_parallelism` controls the maximum thread number of the pool.
 
 ### How to run
 

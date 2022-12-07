@@ -53,11 +53,11 @@ docker pull intel/ai-workflows:document-level-sentiment-analysis
 
 (Optional) Export related proxy into docker environment.
 ```
-export DOCKER_RUN_ENVS="-e ftp_proxy=${ftp_proxy} \ 
-  -e FTP_PROXY=${FTP_PROXY} -e http_proxy=${http_proxy} \ 
-  -e HTTP_PROXY=${HTTP_PROXY} -e https_proxy=${https_proxy} \ 
-  -e HTTPS_PROXY=${HTTPS_PROXY} -e no_proxy=${no_proxy} \ 
-  -e NO_PROXY=${NO_PROXY} -e socks_proxy=${socks_proxy} \ 
+export DOCKER_RUN_ENVS="-e ftp_proxy=${ftp_proxy} \
+  -e FTP_PROXY=${FTP_PROXY} -e http_proxy=${http_proxy} \
+  -e HTTP_PROXY=${HTTP_PROXY} -e https_proxy=${https_proxy} \
+  -e HTTPS_PROXY=${HTTPS_PROXY} -e no_proxy=${no_proxy} \
+  -e NO_PROXY=${NO_PROXY} -e socks_proxy=${socks_proxy} \
   -e SOCKS_PROXY=${SOCKS_PROXY}"
 ```
 Run different fine-tuning pipeline by replacing "Bash Command" according to the pipeline.

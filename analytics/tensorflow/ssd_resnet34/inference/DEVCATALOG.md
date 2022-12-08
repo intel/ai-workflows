@@ -22,7 +22,8 @@ Video streamer data flow
 #### Download the repo
 Clone [Main Repository](https://github.com/intel/video-streamer) repository into your working directory.
 ```
-git clone https://github.com/intel/video-streamer .
+git clone https://github.com/intel/video-streamer
+cd video-streamer
 git checkout v1.0.0
 ```
 #### Download the Video File and Models
@@ -54,12 +55,12 @@ export DOCKER_RUN_ENVS="-e ftp_proxy=${ftp_proxy} \
   -e NO_PROXY=${NO_PROXY} -e socks_proxy=${socks_proxy} \
   -e SOCKS_PROXY=${SOCKS_PROXY}"
 ```
-To run the pipeline, follow below instructions outside of docker instance. 
+To run the pipeline, follow below instructions outside of docker instance.
 
 * Initiate the VDMS inference endpoint.
 
 ```
-numactl --physcpubind=52-55 --membind=1 docker run --net=host -d vuiseng9/intellabs-vdms:demo-191220
+numactl --physcpubind=0 docker run --net=host -d vuiseng9/intellabs-vdms:demo-191220
 ```
 
 * Initiate the Video-Streamer service.
@@ -85,43 +86,89 @@ For docker environment, please go to [docker session](#docker).
 Please go to the directory where you cloned the repo, follow commands to install required software.
 
 ```
+cd video-streamer
+```
+##### 1. Video and AI Setup
+* 1. Edit `install.sh` for `mesa-libGL` install  
+In `install.sh`, default command `sudo yum install -y mesa-libGL` is for CentOS. For Ubuntu, change as following
+```
+#sudo yum install -y mesa-libGL
+sudo apt install libgl1-mesa-glx
+```
+
+* 2. Run following install script
+
+create conda environment `vdms-test`
+```
 conda create -n vdms-test python=3.8
+```
+activate `vdms-test` then run install
+```
 conda activate vdms-test
 ./install.sh
 ```
 
 By default, this will install intel-tensorflow-avx512.  If it is necessary to run the workflow using a specific TensorFlow, please update it in `requirements.txt`
 
+##### 2. VDMS database Setup
+* VDMS instance for database is using docker.  
+Pull Docker Images
+```
+docker pull vuiseng9/intellabs-vdms:demo-191220
+```
+
 ### Configuration
 
-* config/pipeline-settings for pipeline setting
+* 1. Edit config/pipeline-settings for pipeline setting
+
 Modify the parameter `gst_plugin_dir` and `video_path` to fit your Gstreamer plugin directory and input video path.
 
-For example, we have `test.mp4` in `dataset` folder and gstreamer installed in `/home/test_usr/miniconda3/envs/vdms-test`. So we set as following:
 ```
-video_path=dataset/test.mp4
+mv classroom.mp4 dataset/classroom.mp4
+```
+
+For example, we have
+-  `classroom.mp4` in `dataset` folder and
+-  gstreamer installed in `/home/test_usr/miniconda3/envs/vdms-test`. So it is set:
+```
+video_path=dataset/classroom.mp4
 gst_plugin_dir=/home/test_usr/miniconda3/envs/vdms-test/lib/gstreamer-1.0
 ```
-* config/settings.yaml for inference setting
-Customize to choose FP32, AMPBF16 or INT8 for inference.
+* 2. Edit `config/settings.yaml` for inference setting
+   - Customize to choose `data_type` from `FP32`, `AMPBF16` and `INT8` for inference. `INT8` is recommended for better performance.
 
-CPU Optimization settings are found in two files:
+* 3. CPU Optimization settings are found in two files:
 
-`config/pipeline-settings`
-1. cores_per_pipeline
-This controls the number of CPU cores to run in the whole pipeline.
+* 3.1) `config/pipeline-settings`
+   - `cores_per_pipeline` controls the number of CPU cores to run in the whole pipeline.
 
-`config/settings.yaml`
-1. inter_op_parallelism : "2"
-2. intra_op_parallelism : "4"
-
-This controls TensorFlow thread settings. 
-* inter_op_parallelism: the number of threads used by independent non-blocking operations in TensorFlow.
-* intra_op_parallelism: execution of an individual operation can be parallelized on a pool of threads in TensorFlow. `intra_op_parallelism` controls the maximum thread number of the pool.
+* 3.2)  `config/settings.yaml`
+```
+  inter_op_parallelism : "2"  #the number of threads used by independent non-blocking operations in TensorFlow.
+  intra_op_parallelism : "4"  #execution of an individual operation can be parallelized on a pool of threads in TensorFlow.
+```
 
 ### How to run
 
+* 1. Initiate the VDMS inference endpoint.
+
+```
+numactl --physcpubind=0 --membind=1 docker run --net=host -d vuiseng9/intellabs-vdms:demo-191220
+```
+
+* 2. start video AI workflow
+
+```
+./run.sh 1
+```
+
 `run.sh` is configured to accept a single input parameter which defines how many separate instances of the gstreamer pipelines to run. Each OpenMP thread from a given instance is pinned to a physical CPU core. I.e, when running four pipelines with OMP_NUM_THREADS=4
+by configure `config/pipeline-settings`:
+
+```
+cores_per_pipeline = 4
+```
+
 |*Pipeline*|*Cores*|*Memory*|
 | ---- | ---- | ---- |
 |1| 0-3| Local |
@@ -129,7 +176,7 @@ This controls TensorFlow thread settings.
 |3| 8-11| Local |
 |4|12-15| Local |
 
-It is very important that the pipelines don't overlap numa domains or any other hardware non-uniformity.  These values must be updated for each core architecture to get optimum performance.
+It is very important that the pipelines don't overlap numa domains or any other hardware non-uniformity. These values must be updated for each core architecture to get optimum performance.
 
 For launching the workload using a single instance, use the following command:
 ```

@@ -72,7 +72,7 @@ pip install dash scikit-learn pandas pyarrow colorlover
 #### How to run 
 To generate synthetic data for testing from the root directory:
 ```
-cd src/loaders/synthetic/loader
+cd src/loaders/synthetic_loader
 python loader.py
 ```
 To run the dashboard:

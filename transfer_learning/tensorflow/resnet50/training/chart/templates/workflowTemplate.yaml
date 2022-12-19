@@ -1,0 +1,197 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: {{ .Values.metadata.name }}
+  labels:
+  {{- include "demo.labels" . | nindent 4 }}
+spec:
+  arguments:
+    parameters:
+    - name: ref
+      value: {{ .Values.workflow.ref }}
+    - name: repo
+      value: {{ .Values.workflow.repo }}
+    - enum:
+      - SPR
+      - None
+      name: platform
+      value: {{ .Values.workflow.platform }}
+    - enum:
+      - FP32
+      - bf16
+      name: precision
+      value: {{ .Values.workflow.precision }}
+    - enum:
+      - colorectal
+      - resisc
+      - sports
+      name: script
+      value: {{ .Values.workflow.script }}
+    - name: http_proxy
+      value: {{ .Values.proxy }}
+    - name: num-epochs
+      value: {{ .Values.workflow.num_epochs }}
+    - name: batch-size
+      value: {{ .Values.workflow.batch_size }}
+  entrypoint: main
+  templates:
+  - steps:
+    - - name: git-clone
+        template: git-clone
+    - - name: vision-transfer-learning-training
+        template: vision-transfer-learning-training
+    - - name: vision-transfer-learning-inference
+        template: vision-transfer-learning-inference
+    name: main
+  - container:
+      args:
+      - clone
+      - -b
+      - '{{"{{workflow.parameters.ref}}"}}'
+      - '{{"{{workflow.parameters.repo}}"}}'
+      - workspace
+      command:
+      - git
+      env:
+      - name: http_proxy
+        value: '{{"{{workflow.parameters.http_proxy}}"}}'
+      - name: https_proxy
+        value: '{{"{{workflow.parameters.http_proxy}}"}}'
+      image: intel/ai-workflows:vision-transfer-learning-training
+      volumeMounts:
+      - mountPath: /workspace
+        name: workspace
+      workingDir: /
+    name: git-clone
+  - container:
+      args:
+      - run
+      - --no-capture-output
+      - -n
+      - transfer_learning
+      - '{{"./{{workflow.parameters.script}}.sh"}}'
+      command:
+      - conda
+      env:
+      - name: DATASET_DIR
+        value: /dataset
+      - name: PRECISION
+        value: '{{"{{workflow.parameters.precision}}"}}'
+      - name: PLATFORM
+        value: '{{"{{workflow.parameters.platform}}"}}'
+      - name: OUTPUT_DIR
+        value: /output
+      - name: NUM_EPOCHS
+        value: '{{"{{workflow.parameters.num-epochs}}"}}'
+      - name: BATCH_SIZE
+        value: '{{"{{workflow.parameters.batch-size}}"}}'
+      - name: http_proxy
+        value: '{{"{{workflow.parameters.http_proxy}}"}}'
+      - name: https_proxy
+        value: '{{"{{workflow.parameters.http_proxy}}"}}'
+      image: intel/ai-workflows:vision-transfer-learning-training
+      volumeMounts:
+      - mountPath: /workspace
+        name: workspace
+      - mountPath: /output
+        name: output-dir
+      workingDir: /workspace
+    {{- if .Values.dataset.key }}
+    inputs: 
+      artifacts: 
+      - name: dataset
+        path: /dataset
+        s3: 
+          key: {{ .Values.dataset.key }}
+    {{ end }}
+    name: vision-transfer-learning-training
+    outputs:
+      artifacts: 
+      - name: checkpoint
+        path: /output
+    sidecars:
+    - args:
+      - -c
+      - while ! tail -f /output/result.txt ; do sleep 5 ; done
+      command:
+      - sh
+      container: null
+      image: {{ .Values.sidecars.image }}
+      mirrorVolumeMounts: true
+      name: output-log
+      workingDir: /output
+  - container:
+      args:
+      - run
+      - --no-capture-output
+      - -n
+      - transfer_learning
+      - '{{"./{{workflow.parameters.script}}.sh"}}'
+      - --inference
+      - -cp
+      - /output
+      command:
+      - conda
+      env:
+      - name: DATASET_DIR
+        value: /dataset
+      - name: PRECISION
+        value: '{{"{{workflow.parameters.precision}}"}}'
+      - name: PLATFORM
+        value: '{{"{{workflow.parameters.platform}}"}}'
+      - name: OUTPUT_DIR
+        value: /output/inference
+      - name: http_proxy
+        value: '{{"{{workflow.parameters.http_proxy}}"}}'
+      - name: https_proxy
+        value: '{{"{{workflow.parameters.http_proxy}}"}}'
+      image: intel/ai-workflows:vision-transfer-learning-inference
+      volumeMounts:
+      - mountPath: /workspace
+        name: workspace
+      - mountPath: /output
+        name: output-dir
+      workingDir: /workspace
+    {{- if .Values.dataset.key }}
+    inputs: 
+      artifacts: 
+      - name: dataset
+        path: /dataset
+        s3: 
+          key: {{ .Values.dataset.key }}
+    {{ end }}
+    name: vision-transfer-learning-inference
+    outputs: 
+      artifacts: 
+      - name: logs
+        path: /output/inference
+    sidecars:
+    - args:
+      - -c
+      - while ! tail -f /output/result.txt ; do sleep 5 ; done
+      command:
+      - sh
+      container: null
+      image: {{ .Values.sidecars.image }}
+      mirrorVolumeMounts: true
+      name: output-log
+      workingDir: /output
+  volumeClaimTemplates:
+  - metadata:
+      name: workspace
+    name: workspace
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: {{ .Values.volumeClaimTemplates.workspace.resources.requests.storage }}
+  - metadata:
+      name: output-dir
+    name: output-dir
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: {{ .Values.volumeClaimTemplates.output_dir.resources.requests.storage }}

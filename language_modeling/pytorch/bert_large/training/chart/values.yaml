@@ -1,0 +1,26 @@
+metadata:
+  name: hugging-face-dlsa
+
+kubernetesClusterDomain: cluster.local
+proxy: nil
+
+dataset:
+  key: sst
+
+workflow: 
+  dataset: sst2
+  model: bert-large-uncased
+  num_nodes: 2
+  process_per_node: 2
+  ref: v1.0.0
+  repo: https://github.com/intel/document-level-sentiment-analysis
+
+volumeClaimTemplates: 
+  workspace:
+    resources:
+      requests:
+        storage: 2Gi
+  output_dir:
+    resources:
+      requests:
+        storage: 1Gi

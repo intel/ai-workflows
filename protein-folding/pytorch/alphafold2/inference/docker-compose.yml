@@ -1,0 +1,76 @@
+services:
+  param:
+    build:
+      args: 
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ${no_proxy}
+      dockerfile: Dockerfile.protein-prediction
+    command: conda run -n alphafold2 --no-capture-output python extract_params.py --input /dataset/params/params_${MODEL}.npz --output_dir /output/weights/extracted/${MODEL}
+    environment: 
+      - DATASET_DIR=${DATASET_DIR}
+      - EXPERIMENT_NAME=${EXPERIMENT_NAME}
+      - MODEL=${MODEL}
+      - OUTPUT_DIR=${OUTPUT_DIR}
+      - http_proxy=${http_proxy}
+      - https_proxy=${https_proxy}
+      - no_proxy=${no_proxy}
+    image: ${FINAL_IMAGE_NAME}:inference-ubuntu-20.04
+    privileged: true
+    volumes: 
+      - ${DATASET_DIR}:/dataset
+      - $PWD:/workspace
+      - ${OUTPUT_DIR}:/output
+    working_dir: /workspace/protein-prediction/models/aidd/pytorch/alphafold2/inference
+  protein-prediction-preproc:
+    build:
+      args: 
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ${no_proxy}
+      dockerfile: Dockerfile.protein-prediction
+    command: conda run -n alphafold2 --no-capture-output bash online_preproc_baremetal.sh /output /dataset /output/samples /output/experiments/${EXPERIMENT_NAME}
+    depends_on:
+      param:
+        condition: service_completed_successfully
+    environment: 
+      - DATASET_DIR=${DATASET_DIR}
+      - EXPERIMENT_NAME=${EXPERIMENT_NAME}
+      - MODEL=${MODEL}
+      - OUTPUT_DIR=${OUTPUT_DIR}
+      - http_proxy=${http_proxy}
+      - https_proxy=${https_proxy}
+      - no_proxy=${no_proxy}
+    image: ${FINAL_IMAGE_NAME}:inference-ubuntu-20.04
+    privileged: true
+    volumes: 
+      - ${DATASET_DIR}:/dataset
+      - $PWD:/workspace
+      - ${OUTPUT_DIR}:/output
+    working_dir: /workspace/protein-prediction/quickstart/aidd/pytorch/alphafold2/inference
+  protein-prediction-inference:
+    build:
+      args: 
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ${no_proxy}
+      dockerfile: Dockerfile.protein-prediction
+    command: conda run -n alphafold2 --no-capture-output bash online_inference_baremetal.sh /opt/conda/envs/alphafold2 /output /dataset /output/samples /output/experiments/${EXPERIMENT_NAME} ${MODEL}  
+    depends_on:
+      protein-prediction-preproc:
+        condition: service_completed_successfully
+    environment: 
+      - DATASET_DIR=${DATASET_DIR}
+      - EXPERIMENT_NAME=${EXPERIMENT_NAME}
+      - MODEL=${MODEL}
+      - OUTPUT_DIR=${OUTPUT_DIR}
+      - http_proxy=${http_proxy}
+      - https_proxy=${https_proxy}
+      - no_proxy=${no_proxy}
+    image: ${FINAL_IMAGE_NAME}:inference-ubuntu-20.04
+    privileged: true
+    volumes: 
+      - ${DATASET_DIR}:/dataset
+      - $PWD:/workspace
+      - ${OUTPUT_DIR}:/output
+    working_dir: /workspace/protein-prediction/quickstart/aidd/pytorch/alphafold2/inference

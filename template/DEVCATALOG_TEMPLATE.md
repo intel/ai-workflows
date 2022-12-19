@@ -13,7 +13,9 @@ For image sizing, use 100% width rather than absolute image size.)
 #### Download the repo
 Clone [Main Repository](<Link to Main GitHub Repository>) repository into your working directory.
 ```
-git clone -b <ref> <e2e_repo.git> .
+git clone <e2e_repo.git>
+cd <repo name>
+git checkout <branch>
 ```
 #### Download the datasets
 `<Direction on Downloading Dataset>`

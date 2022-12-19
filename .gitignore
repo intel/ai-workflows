@@ -1,5 +1,10 @@
+analytics/classical-ml/recsys/training/analytics-with-python
 analytics/classical-ml/synthetic/inference/wafer-insights
-analytics/tensorflow/ssd_resnet34/inference/video-streamer 
+analytics/tensorflow/ssd_resnet34/inference/video-streamer
+big-data/ppml/chronos
+big-data/friesian/training/BigDL
+big-data/ppml/bigDL-ppml
+classification/tensorflow/bert_base/inference/aws_sagemaker
 language_modeling/pytorch/bert_base/inference/azureml
 language_modeling/pytorch/bert_base/training/azureml 
 language_modeling/pytorch/bert_large/training/dlsa 

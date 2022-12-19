@@ -6,11 +6,11 @@ DLSA is Intel optimized representative End-to-end Fine-Tuning & Inference pipeli
 
 ## How it Works
 
-* Uses Hugging face Tokenizer API, Intel PCL Optimization with Hugging Face for Fine-Tuning and Intel Extension for PyTorch for inference optimizations and quantization.
+* Uses Hugging Face Tokenizer API, Intel PCL Optimization with Hugging Face for Fine-Tuning and Intel Extension for PyTorch for inference optimizations and quantization.
 
-* Classifies the sentiment of any input English paragraph as positive or negative sentiment.
+* Classifies the sentiment of any input paragraph of English text as either a positive or negative sentiment.
 
-* Uses HF’s BERT model with Masked-Language-Modeling task pretrained using large corpus of English data, to fine tune a new BERT model with sentiment analysis task using SST-2 or IMDB dataset.
+* Uses HF’s BERT model with Masked-Language-Modeling task pretrained using large corpus of English language data, to fine tune a new BERT model with sentiment analysis task using SST-2 or IMDB dataset.
 
 * The workflow uses BF16 precision in SPR which speeds up the training time using Intel® AMX, without noticeable loss in accuracy when compared to FP32 precision using (Intel®  AVX-512).
 
@@ -20,13 +20,13 @@ DLSA is Intel optimized representative End-to-end Fine-Tuning & Inference pipeli
 
 ### **Prerequisites**
 
-#### Download the repo
+#### Download the Repo
 ```
 git clone https://github.com/intel/document-level-sentiment-analysis.git
 cd document-level-sentiment-analysis/profiling-transformers
 git checkout v1.0.0
 ```
-#### Download the datasets
+#### Download the Datasets
 ```
 mkdir datasets
 cd datasets
@@ -40,7 +40,7 @@ cd ..
 **Make sure the network connections work well for downloading the datasets.**
 
 ### **Docker**
-Below setup and how-to-run sessions are for users who want to use provided docker image.  
+Below setup and how-to-run sessions are for users who want to use the provided docker image.  
 For bare metal environment, please go to [bare metal session](#bare-metal).
 
 #### Setup 
@@ -49,7 +49,7 @@ For bare metal environment, please go to [bare metal session](#bare-metal).
 ```
 docker pull intel/ai-workflows:document-level-sentiment-analysis
 ```
-#### How to run 
+#### How to Run 
 
 (Optional) Export related proxy into docker environment.
 ```
@@ -65,7 +65,7 @@ Run different fine-tuning pipeline by replacing "Bash Command" according to the 
 docker run -a stdout  $DOCKER_RUN_ENVS  --volume $(pwd):/workspace --workdir /workspace \
 --privileged --init -it intel/ai-workflows:document-level-sentiment-analysis <Bash Command>
 ```
-For example, here is how to run the single node fine-tuning pipeline with stock pyTorch.
+For example, here is how to run the single node fine-tuning pipeline with stock PyTorch.
 ```
 export DATASET=sst2
 export MODEL=bert-large-uncased
@@ -76,7 +76,7 @@ docker run -a stdout $DOCKER_RUN_ENVS \
   --env ${OUTPUT_DIR}:${OUTPUT_DIR}/fine_tuned \
   --volume ${OUTPUT_DIR}:${OUTPUT_DIR} \
   --volume ${PWD}:/workspace \
-  --workdir /workspace/profiling-transformers \
+  --workdir /workspace \
   --privileged --init -it \
   intel/ai-workflows:document-level-sentiment-analysis \
   fine-tuning/run_dist.sh -np 1 -ppn 1 fine-tuning/run_ipex_native.sh
@@ -98,7 +98,7 @@ conda create -n dlsa python=3.8 --yes
 conda activate dlsa
 sh install.sh
 ```
-#### How to run 
+#### How to Run 
 
 ##### Fine-Tuning Pipeline
 

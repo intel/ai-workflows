@@ -37,14 +37,19 @@ Where `KEY` and `VALUE` pairs are environment variables that can be used to cust
 
 |AI Workflow|Framework/Tool|Mode|
 |-|-|-|
+|Chronos Time Series Forecasting|Chronos and PyTorch*|[Training](./big-data/chronos/DEVCATALOG.md)
 |Document-Level Sentiment Analysis|PyTorch*|[Training](./language_modeling/pytorch/bert_large/training/)|
-|Vision Based Transfer Learning|TensorFlow|[Training](./transfer_learning/tensorflow/resnet50/training/) \| [Inference](./transfer_learning/tensorflow/resnet50/inference/)|
-|NLP workflow for Azure ML| PyTorch* and Jupyter|[Training](./language_modeling/pytorch/bert_base/training/) \| [Inference](./language_modeling/pytorch/bert_base/inference/)|
-|Video Streamer|TensorFlow|[Inference](./analytics/tensorflow/ssd_resnet34/inference/)|
-|Quantization Aware Training and Inference|OpenVINO™|[Quantization Aware Training(QAT)](https://github.com/intel/nlp-training-and-inference-openvino/tree/v1.0/question-answering-bert-qat)|
+|Friesian Recommendation System|Spark with TensorFlow|[Training](./big-data/friesian/training/) \| [Inference](./big-data/friesian/DEVCATALOG.md)|
 |Habana® Gaudi® Processor Training and Inference using OpenVINO™ Toolkit for U-Net 2D Model|OpenVINO™|[Training and Inference](https://github.com/intel/cv-training-and-inference-openvino/tree/v1.0.0/gaudi-segmentation-unet-ptq)|
+|Privacy Preservation|Spark with TensorFlow and PyTorch*|[Training and Inference](./big-data/ppml/DEVCATALOG.md)|
+|NLP workflow for AWS Sagemaker|TensorFlow and Jupyter|[Inference](./classification/tensorflow/bert_base/inference/)|
+|NLP workflow for Azure ML|PyTorch* and Jupyter|[Training](./language_modeling/pytorch/bert_base/training/) \| [Inference](./language_modeling/pytorch/bert_base/inference/)|
+|Protein Structure Prediction|PyTorch*|[Inference](./protein-folding/pytorch/alphafold2/inference/)
+|Quantization Aware Training and Inference|OpenVINO™|[Quantization Aware Training(QAT)](https://github.com/intel/nlp-training-and-inference-openvino/tree/v1.0/question-answering-bert-qat)|
+|RecSys Challenge Analytics With Python|Hadoop and Spark|[Training](./analytics/classical-ml/recsys/training/)|
+|Video Streamer|TensorFlow|[Inference](./analytics/tensorflow/ssd_resnet34/inference/)|
+|Vision Based Transfer Learning|TensorFlow|[Training](./transfer_learning/tensorflow/resnet50/training/) \| [Inference](./transfer_learning/tensorflow/resnet50/inference/)|
 |Wafer Insights|SKLearn|[Inference](./analytics/classical-ml/synthetic/inference/)|
-
 
 
 ### Cleanup

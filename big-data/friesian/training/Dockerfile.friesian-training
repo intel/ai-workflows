@@ -1,0 +1,44 @@
+ARG BASE_IMAGE_NAME="ubuntu"
+ARG BASE_IMAGE_TAG="20.04"
+
+FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install --no-install-recommends --fix-missing -y \
+    ca-certificates \
+    vim \
+    wget
+
+RUN wget --no-check-certificate -q https://repo.huaweicloud.com/java/jdk/8u201-b09/jdk-8u201-linux-x64.tar.gz && \
+    tar -zxvf jdk-8u201-linux-x64.tar.gz && \
+    mv jdk1.8.0_201 /opt/jdk1.8.0_201 && \
+    rm jdk-8u201-linux-x64.tar.gz
+
+SHELL ["/bin/bash", "-c"]
+
+ARG CONDA_INSTALL_PATH=/opt/conda
+ARG MINICONDA_VERSION="latest"
+
+RUN apt-get update && \
+    wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh -O miniconda.sh && \
+    bash miniconda.sh -b -p ${CONDA_INSTALL_PATH} && \
+    $CONDA_INSTALL_PATH/bin/conda clean -ya && \
+    rm miniconda.sh && \
+    ln -s ${CONDA_INSTALL_PATH}/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
+    echo ". ${CONDA_INSTALL_PATH}/etc/profile.d/conda.sh" >> ~/.bashrc && \
+    echo "conda activate bigdl" >> ~/.bashrc
+
+ARG PYTHON_VERSION="3.7.5"
+ENV JAVA_HOME=/opt/jdk1.8.0_201
+ENV JRE_HOME=$JAVA_HOME/jre
+ENV PATH="${CONDA_INSTALL_PATH}/bin:${PATH}:/opt/conda/envs/bigdl/bin:$JAVA_HOME/bin:$JRE_HOME"
+
+RUN conda create -yn bigdl python=${PYTHON_VERSION} && \
+    source activate bigdl && \
+    conda update -y -n base -c defaults conda && \
+    conda clean -ya && \
+    pip install tensorflow==2.9.0 \
+        --pre --upgrade bigdl-friesian[train]
+
+RUN mkdir -p /workspace

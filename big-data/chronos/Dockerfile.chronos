@@ -1,0 +1,29 @@
+FROM ubuntu:20.04
+ARG DEBIAN_FRONTEND=noninteractive
+
+SHELL ["/bin/bash", "-c"]
+ENV LANG C.UTF-8
+
+RUN apt-get update --fix-missing && \
+    apt-get install -y apt-utils vim curl nano wget unzip git && \
+    apt-get install -y gcc g++ make && \
+    apt-get install -y libsm6 libxext6 libxrender-dev && \
+    apt-get install -y openjdk-8-jre && \
+    rm /bin/sh && \
+    ln -sv /bin/bash /bin/sh && \
+    echo "auth required pam_wheel.so use_uid" >> /etc/pam.d/su && \
+    chgrp root /etc/passwd && chmod ug+rw /etc/passwd && \
+    # Install Miniconda
+    wget https://repo.anaconda.com/miniconda/Miniconda3-py37_4.12.0-Linux-x86_64.sh && \
+    chmod +x Miniconda3-py37_4.12.0-Linux-x86_64.sh && \
+    ./Miniconda3-py37_4.12.0-Linux-x86_64.sh -b -f -p /usr/local && \
+    rm Miniconda3-py37_4.12.0-Linux-x86_64.sh 
+
+ENV PATH /usr/local/envs/chronos/bin:$PATH
+
+RUN conda create -y -n chronos python=3.7 setuptools=58.0.4 && source activate chronos && \
+    pip install --no-cache-dir --pre --upgrade bigdl-chronos[pytorch,automl] matplotlib notebook==6.4.12 && \
+    pip uninstall -y torchtext
+
+RUN echo "source activate chronos" > ~/.bashrc
+RUN echo "export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/" >> ~/.bashrc

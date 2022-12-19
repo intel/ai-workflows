@@ -1,0 +1,60 @@
+ARG BASE_IMAGE_NAME="ubuntu"
+ARG BASE_IMAGE_TAG="20.04"
+
+FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install --no-install-recommends --fix-missing -y \
+    ca-certificates \
+    git \
+    numactl \
+    vim \
+    wget
+
+SHELL ["/bin/bash", "-c"]
+
+ARG CONDA_INSTALL_PATH=/opt/conda
+ARG MINICONDA_VERSION="latest"
+
+RUN apt-get update && \
+    wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh -O miniconda.sh && \
+    bash miniconda.sh -b -p ${CONDA_INSTALL_PATH} && \
+    $CONDA_INSTALL_PATH/bin/conda clean -ya && \
+    rm miniconda.sh && \
+    ln -s ${CONDA_INSTALL_PATH}/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
+    echo ". ${CONDA_INSTALL_PATH}/etc/profile.d/conda.sh" >> ~/.bashrc && \
+    echo "conda activate alphafold2" >> ~/.bashrc
+
+ARG PYTHON_VERSION="3.9.7"
+ENV PATH="${CONDA_INSTALL_PATH}/bin:${PATH}:/opt/conda/envs/alphafold2/bin"
+
+RUN conda create -yn alphafold2 python=${PYTHON_VERSION} && \
+    source activate alphafold2 && \
+    conda update -y -n base -c defaults conda && \
+    conda install -y -c intel python intelpython && \
+    conda install -y -c conda-forge openmm pdbfixer aria2 && \
+    conda install -y -c conda-forge -c bioconda hmmer kalign2 hhsuite && \
+    conda install -y -c pytorch pytorch cpuonly && \
+    conda install -y jemalloc && \
+    conda clean -ya && \
+    pip install absl-py \
+        biopython \
+        chex \
+        dm-haiku \
+        dm-tree \
+        immutabledict \
+        intel_extension_for_pytorch \
+        jax \
+        jaxlib \
+        joblib \
+        ml-collections \
+        numpy \
+        scipy \
+        tensorflow \
+        pandas \
+        psutil \
+        tqdm \
+        -f https://storage.googleapis.com/jax-releases/jax_releases.html
+
+RUN mkdir -p /workspace

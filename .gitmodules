@@ -1,9 +1,24 @@
+[submodule "analytics/classical-ml/recsys/training/analytics-with-python"]
+	path = analytics/classical-ml/recsys/training/analytics-with-python
+	url = https://github.com/intel/recommender-system-with-classical-ml/
 [submodule "analytics/classical-ml/synthetic/inference/wafer-insights"]
 	path = analytics/classical-ml/synthetic/inference/wafer-insights
 	url = https://github.com/intel/wafer-insights-with-classical-ml
 [submodule "analytics/tensorflow/ssd_resnet34/inference/video-streamer"]
 	path = analytics/tensorflow/ssd_resnet34/inference/video-streamer
 	url = https://github.com/intel/video-streamer
+[submodule "big-data/chronos/BigDL"]
+	path = big-data/chronos/BigDL
+	url = https://github.com/intel-analytics/BigDL.git
+[submodule "big-data/friesian/training/BigDL"]
+	path = big-data/friesian/training/BigDL
+	url = https://github.com/intel-analytics/BigDL
+[submodule "big-data/ppml/bigDL-ppml"]
+	path = big-data/ppml/bigDL-ppml
+	url = https://github.com/intel-analytics/BigDL
+[submodule "classification/tensorflow/bert_base/inference/aws_sagemaker"]
+	path = classification/tensorflow/bert_base/inference/aws_sagemaker
+	url = https://github.com/intel/NLP-Workflow-with-AWS
 [submodule "language_modeling/pytorch/bert_large/training/dlsa"]
 	path = language_modeling/pytorch/bert_large/training/dlsa
 	url = https://github.com/intel/document-level-sentiment-analysis
@@ -13,6 +28,9 @@
 [submodule "language_modeling/pytorch/bert_base/training/azureml"]
 	path = language_modeling/pytorch/bert_base/training/azureml
 	url = https://github.com/intel/Intel-NLP-workflow-for-Azure-ML.git
+[submodule "protein-folding/pytorch/alphafold2/inference/protein-prediction"]
+	path = protein-folding/pytorch/alphafold2/inference/protein-prediction
+	url = https://github.com/IntelAI/models
 [submodule "transfer_learning/tensorflow/resnet50/inference/transfer-learning-inference"]
 	path = transfer_learning/tensorflow/resnet50/inference/transfer-learning-inference
 	url = https://github.com/intel/vision-based-transfer-learning-and-inference

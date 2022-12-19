@@ -1,7 +1,8 @@
 # **Intel® NLP workflow for Azure** ML - Inference
 
 ## Overview
-This is a workflow to demonstrate how the users can utilize Intel’s XPU hardware (e.g.: CPU - Ice Lake or above) and related optimized software to perform distributed training and inference on the Azure Machine Learning Platform. The main software packages used here are Intel Extension for PyTorch, PyTorch, HuggingFace, Azure Machine Learning Platform, and Intel Neural Compressor. For more detailed information, please visit the [Intel® NLP workflow for Azure* ML](https://github.com/intel/Intel-NLP-workflow-for-Azure-ML) GitHub repository.
+This workflow demonstrates how users can utilize Intel’s XPU hardware (e.g.: CPU - Ice Lake or above) and related optimized software to perform distributed training and inference on the Azure Machine Learning Platform. The main software packages used here are Intel Extension for PyTorch, PyTorch, HuggingFace, Azure Machine Learning Platform, and Intel Neural Compressor. For more detailed information, please visit the [Intel® NLP workflow for Azure* ML](https://github.com/intel/Intel-NLP-workflow-for-Azure-ML) GitHub repository.
+****
 
 ## How it Works
 This workflow utilizes the infrastructure provided by AzureML.
@@ -62,24 +63,25 @@ For configuring the Azure credentials using the Command-Line Interface, you may 
 <br>
 https://docs.microsoft.com/en-us/cli/azure/authenticate-azure-cli
 
-The following two websites lists out the availability and type of the instances for users. Users may choose the appropriate instances based on their needs and region:
+The following two websites list out the availability and type of the instances for users. Users may choose the appropriate instances based on their needs and region:
 <br>
 https://learn.microsoft.com/en-us/azure/machine-learning/concept-compute-target
 <br>
 https://azure.microsoft.com/en-us/explore/global-infrastructure/products-by-region/?products=virtual-machines&regions=us-east
 
 #### Download the repo
-Clone [Intel® NLP workflow for Azure* ML](https://github.com/intel/Intel-NLP-workflow-for-Azure-ML) repository into your working directory.
+Clone [Intel® NLP workflow for Azure* ML](https://github.com/intel/Intel-NLP-workflow-for-Azure-ML) repository.
 ```
-git clone https://github.com/intel/Intel-NLP-workflow-for-Azure-ML.git .
+git clone https://github.com/intel/Intel-NLP-workflow-for-Azure-ML.git
+cd Intel-NLP-workflow-for-Azure-ML
 git checkout v1.0.1
 ```
 
-#### Download the datasets
-The dataset will be downloaded when training runs the first time.
+#### Download the Datasets
+The dataset will be downloaded the first time the workflow runs.
 
 ### **Docker**
-Below setup and how-to-run sessions are for users who want to use provided docker image to run the entire pipeline. 
+Below setup and how-to-run sessions are for users who want to use the provided docker image to run the entire pipeline. 
 For interactive set up, please go to [Interactive Docker](#interactive-docker).
 
 #### Setup 
@@ -90,7 +92,7 @@ Download the `config.json` file from your Azure ML Studio Workspace.
 docker pull intel/ai-workflows:nlp-azure-inference
 ```
 
-#### How to run 
+#### How to Run 
 Use the inference script `1.0-intel-azureml-inference.py` and downloaded `config.json` file to run the inference pipeline.
 
 The code snippet below runs the inference session. This session will call the FP32 model generated during the training session from the `notebooks/fp32_model_output` folder
@@ -111,7 +113,7 @@ docker run \
 ```
 
 ### **Interactive Docker**
-Below setup and how-to-run sessions are for users who want to use interactive environment.  
+Below setup and how-to-run sessions are for users who want to use an interactive environment.  
 For docker pipeline, please go to [docker session](#docker).
 #### Setup 
 

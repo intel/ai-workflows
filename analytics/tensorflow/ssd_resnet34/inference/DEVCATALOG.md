@@ -3,24 +3,24 @@
 
 The video streamer pipeline is designed to mimic real-time video analytics. Real-time data is provided to an inference endpoint that executes single-shot object detection. The metadata created during inference is then uploaded to a database for curation.
 
-## How it works
+## How it Works
 
-* It's a Gstreamer Pipeline based multimedia framework.
-  Gstreamer elements are chained to create a pipeline where Gstreamer handles the flow of metadata associated with the media.
+* A Gstreamer Pipeline based multimedia framework.
+  Gstreamer elements are chained, to create a pipeline where Gstreamer handles the flow of metadata associated with the media.
 
-* Use TensorFlow to Inference. Inference is implemented as a plugin of Gstreamer.
+* Uses TensorFlow for Inference. Inference is implemented as a plugin of Gstreamer.
 
-* OpenCV Image preprocessing (normalization, resize) and draw Bounding box, labelling
-* VDMS to store uploading metadata to database
-* The workflow uses BF16/INT8 precision in SPR which speeds up the inference time using Intel® AMX, without noticeable loss in accuracy when compared to FP32 precision (using Intel® AVX-512).
+* OpenCV Image preprocessing (normalization, resize) and drawing Bounding box, labelling
+* VDMS stores uploaded metadata to database
+* The workflow uses BF16/INT8 precision in SPR, which speeds up the inference time using Intel® AMX, without noticeable loss in accuracy when compared to FP32 precision (using Intel® AVX-512).
 
-Video streamer data flow
+Video Streamer Data Flow
 ![video-pipeline](https://user-images.githubusercontent.com/43555799/205149596-f5054457-ef29-46ba-82e2-a979828d2754.png)
 
-## Get started
+## Get Started
 ### **Prerequisites**
 #### Download the repo
-Clone [Main Repository](https://github.com/intel/video-streamer) repository into your working directory.
+Clone [Video Streamer](https://github.com/intel/video-streamer) repository.
 ```
 git clone https://github.com/intel/video-streamer
 cd video-streamer
@@ -35,7 +35,7 @@ wget https://storage.googleapis.com/intel-optimized-tensorflow/models/v1_8/ssd_r
 wget https://storage.googleapis.com/intel-optimized-tensorflow/models/v1_8/ssd_resnet34_int8_1200x1200_pretrained_model.pb -P models
 ```
 ### **Docker**
-Below setup and how-to-run sessions are for users who want to use provided docker image.  
+Below setup and how-to-run sessions are for users who want to use the provided docker image.  
 For bare metal environment, please go to [bare metal session](#bare-metal).
 #### Setup 
 
@@ -44,7 +44,7 @@ For bare metal environment, please go to [bare metal session](#bare-metal).
 docker pull vuiseng9/intellabs-vdms:demo-191220
 docker pull intel/ai-workflows:video-streamer
 ```
-#### How to run 
+#### How to Run 
 
 (Optional) Export related proxy into docker environment.
 ```
@@ -55,7 +55,7 @@ export DOCKER_RUN_ENVS="-e ftp_proxy=${ftp_proxy} \
   -e NO_PROXY=${NO_PROXY} -e socks_proxy=${socks_proxy} \
   -e SOCKS_PROXY=${SOCKS_PROXY}"
 ```
-To run the pipeline, follow below instructions outside of docker instance.
+To run the pipeline, follow the below instructions outside of the docker instance.
 
 * Initiate the VDMS inference endpoint.
 
@@ -90,13 +90,13 @@ cd video-streamer
 ```
 ##### 1. Video and AI Setup
 * 1. Edit `install.sh` for `mesa-libGL` install  
-In `install.sh`, default command `sudo yum install -y mesa-libGL` is for CentOS. For Ubuntu, change as following
+In `install.sh`, default command `sudo yum install -y mesa-libGL` is for CentOS. For Ubuntu, change as follows
 ```
 #sudo yum install -y mesa-libGL
 sudo apt install libgl1-mesa-glx
 ```
 
-* 2. Run following install script
+* 2. Run the following install script
 
 create conda environment `vdms-test`
 ```
@@ -110,8 +110,8 @@ conda activate vdms-test
 
 By default, this will install intel-tensorflow-avx512.  If it is necessary to run the workflow using a specific TensorFlow, please update it in `requirements.txt`
 
-##### 2. VDMS database Setup
-* VDMS instance for database is using docker.  
+##### 2. VDMS Database Setup
+* VDMS instance for database uses docker.  
 Pull Docker Images
 ```
 docker pull vuiseng9/intellabs-vdms:demo-191220
@@ -129,7 +129,7 @@ mv classroom.mp4 dataset/classroom.mp4
 
 For example, we have
 -  `classroom.mp4` in `dataset` folder and
--  gstreamer installed in `/home/test_usr/miniconda3/envs/vdms-test`. So it is set:
+-  gstreamer installed in `/home/test_usr/miniconda3/envs/vdms-test`. So settings should be:
 ```
 video_path=dataset/classroom.mp4
 gst_plugin_dir=/home/test_usr/miniconda3/envs/vdms-test/lib/gstreamer-1.0
@@ -148,7 +148,7 @@ gst_plugin_dir=/home/test_usr/miniconda3/envs/vdms-test/lib/gstreamer-1.0
   intra_op_parallelism : "4"  #execution of an individual operation can be parallelized on a pool of threads in TensorFlow.
 ```
 
-### How to run
+### How to Run
 
 * 1. Initiate the VDMS inference endpoint.
 
@@ -156,13 +156,13 @@ gst_plugin_dir=/home/test_usr/miniconda3/envs/vdms-test/lib/gstreamer-1.0
 numactl --physcpubind=0 --membind=1 docker run --net=host -d vuiseng9/intellabs-vdms:demo-191220
 ```
 
-* 2. start video AI workflow
+* 2. Start video AI workflow
 
 ```
 ./run.sh 1
 ```
 
-`run.sh` is configured to accept a single input parameter which defines how many separate instances of the gstreamer pipelines to run. Each OpenMP thread from a given instance is pinned to a physical CPU core. I.e, when running four pipelines with OMP_NUM_THREADS=4
+`run.sh` is configured to accept a single input parameter which defines how many separate instances of the gstreamer pipelines to run. Each OpenMP thread from a given instance is pinned to a physical CPU core. For example, when running four pipelines with OMP_NUM_THREADS=4
 by configure `config/pipeline-settings`:
 
 ```
@@ -176,14 +176,14 @@ cores_per_pipeline = 4
 |3| 8-11| Local |
 |4|12-15| Local |
 
-It is very important that the pipelines don't overlap numa domains or any other hardware non-uniformity. These values must be updated for each core architecture to get optimum performance.
+It is very important that the pipelines do not overlap numa domains or any other hardware non-uniformity. These values must be updated for each core architecture to get optimum performance.
 
-For launching the workload using a single instance, use the following command:
+To launch the workload using a single instance, use the following command:
 ```
 ./run.sh 1
 ```
 
-For launching 14 instances with 4 cores per instance on a dual socket Xeon 8280, just run
+To launch 14 instances with 4 cores per instance on a dual socket Xeon 8280, just run
 ```
 ./run.sh 14
 ```

@@ -1,0 +1,21 @@
+services:
+  chronos:
+    build:
+      args:
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ${no_proxy}
+      dockerfile: Dockerfile.chronos
+    command: sh -c "jupyter nbconvert --to python chronos_nyc_taxi_tsdataset_forecaster.ipynb && \
+                    sed '26,40d' chronos_nyc_taxi_tsdataset_forecaster.py > chronos_taxi_forecaster.py && \
+                    python chronos_taxi_forecaster.py"
+    environment:
+      - http_proxy=${http_proxy}
+      - https_proxy=${https_proxy}
+      - no_proxy=${no_proxy}
+    image: ${FINAL_IMAGE_NAME}:training-ubuntu-20.04
+    network_mode: "host"
+    privileged: true
+    volumes:
+    - ./BigDL:/workspace/BigDL
+    working_dir: /workspace/BigDL/python/chronos/colab-notebook

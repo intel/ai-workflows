@@ -8,8 +8,10 @@ services:
       dockerfile: Dockerfile.vision-transfer-learning
     command: conda run --no-capture-output -n transfer_learning ./${SCRIPT}.sh
     environment: 
+      - BATCH_SIZE=${BATCH_SIZE}
       - DATASET_DIR=/workspace/data
       - OUTPUT_DIR=${OUTPUT_DIR}/${SCRIPT}
+      - NUM_EPOCHS=${NUM_EPOCHS}
       - PLATFORM=${PLATFORM}
       - PRECISION=${PRECISION}
       - http_proxy=${http_proxy}

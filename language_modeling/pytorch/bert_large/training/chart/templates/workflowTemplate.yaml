@@ -1,0 +1,113 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: {{ .Values.metadata.name }}
+  labels:
+  {{- include "chart.labels" . | nindent 4 }}
+spec:
+  arguments:
+    parameters:
+    - name: ref
+      value: {{ .Values.workflow.ref }}
+    - name: repo
+      value: {{ .Values.workflow.repo }}
+    - name: http_proxy
+      value: {{ .Values.proxy }}
+    - enum:
+      - sst2
+      - imdb
+      name: dataset
+      value: {{ .Values.workflow.dataset }}
+    - name: model
+      value: {{ .Values.workflow.model }}
+    - name: num_nodes
+      value: {{ .Values.workflow.num_nodes }}
+    - name: process_per_node
+      value: {{ .Values.workflow.process_per_node }}
+  entrypoint: main
+  templates:
+  - steps:
+    - - name: git-clone
+        template: git-clone
+    - - name: hugging-face-dlsa-training
+        template: hugging-face-dlsa-training
+    name: main
+  - container:
+      args:
+      - clone
+      - -b
+      - '{{"{{workflow.parameters.ref}}"}}'
+      - '{{"{{workflow.parameters.repo}}"}}'
+      - workspace
+      command:
+      - git
+      env:
+      - name: http_proxy
+        value: '{{"{{workflow.parameters.http_proxy}}"}}'
+      - name: https_proxy
+        value: '{{"{{workflow.parameters.http_proxy}}"}}'
+      image: intel/ai-workflows:document-level-sentiment-analysis
+      volumeMounts:
+      - mountPath: /workspace
+        name: workspace
+      workingDir: /
+    name: git-clone
+  - container:
+      args:
+      - '-c'
+      - >-
+        fine-tuning/run_dist.sh fine-tuning/run_ipex_native.sh
+        # Keeping until multi-node support is added
+        #-np '{{"{{workflow.parameters.num_nodes}}"}}' \
+        #-ppn '{{"{{workflow.parameters.process_per_node}}"}}' \
+        #fine-tuning/run_ipex_native.sh
+      command:
+      - sh
+      env:
+      - name: DATASET
+        value: '{{"{{workflow.parameters.dataset}}"}}'
+      - name: MODEL
+        value: '{{"{{workflow.parameters.model}}"}}'
+      - name: OUTPUT_DIR
+        value: /output
+      - name: http_proxy
+        value: '{{"{{workflow.parameters.http_proxy}}"}}'
+      - name: https_proxy
+        value: '{{"{{workflow.parameters.http_proxy}}"}}'
+      image: intel/ai-workflows:document-level-sentiment-analysis
+      volumeMounts:
+      - mountPath: /workspace
+        name: workspace
+      - mountPath: /output
+        name: output-dir
+      workingDir: /workspace/profiling-transformers
+    inputs: 
+      artifacts:
+      - name: dataset
+        path: /workspace/profiling-transformers/datasets/{{ .Values.dataset.key }}
+        s3: 
+          key: {{ .Values.dataset.key }}
+    name: hugging-face-dlsa-training
+    outputs:
+      artifacts: 
+      - name: checkpoint
+        path: /output
+  volumeClaimTemplates:
+  - metadata:
+      name: workspace
+    name: workspace
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: {{ .Values.volumeClaimTemplates.workspace.resources.requests.storage }}
+  - metadata:
+      name: output-dir
+    name: output-dir
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: {{ .Values.volumeClaimTemplates.output_dir.resources.requests.storage }}

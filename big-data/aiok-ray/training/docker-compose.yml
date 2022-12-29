@@ -1,0 +1,38 @@
+networks: 
+  ray-training:
+    external: true
+services:
+  recommendation-ray:
+    build:
+      args: 
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ${no_proxy}
+      dockerfile: DockerfilePytorch
+      context: AIOK_Ray/Dockerfile-ubuntu18.04
+    command: 
+      - /bin/bash
+      - -c
+      - |
+        bash $$APP_DIR/scripts/run_train_docker.sh $RUN_MODE
+    container_name: ray-training
+    hostname: ray
+    networks:
+      - ray-training
+    environment:
+      - http_proxy=${http_proxy}
+      - https_proxy=${https_proxy}
+      - no_proxy=${no_proxy}
+      - RUN_MODE=${RUN_MODE}
+      - APP_DIR=/home/vmagent/app/e2eaiok
+      - OUTPUT_DIR=/output
+    image: ${FINAL_IMAGE_NAME}:training-ubuntu-18.04
+    privileged: true
+    devices:
+      - /dev/dri
+    volumes: 
+      - ${DATASET_DIR}:/home/vmagent/app/dataset/criteo
+      - ./AIOK_Ray:/home/vmagent/app/e2eaiok
+      - ${OUTPUT_DIR}:/output
+    working_dir: /home/vmagent/app/e2eaiok/dlrm_all/dlrm/
+    shm_size: 300g

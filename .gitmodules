@@ -37,3 +37,9 @@
 [submodule "transfer_learning/tensorflow/resnet50/training/transfer-learning-training"]
 	path = transfer_learning/tensorflow/resnet50/training/transfer-learning-training
 	url = https://github.com/intel/vision-based-transfer-learning-and-inference
+[submodule "big-data/aiok-ray/inference/AIOK_Ray"]
+	path = big-data/aiok-ray/inference/AIOK_Ray
+	url = https://github.com/intel/e2eAIOK/
+[submodule "big-data/aiok-ray/training/AIOK_Ray"]
+	path = big-data/aiok-ray/training/AIOK_Ray
+	url = https://github.com/intel/e2eAIOK/

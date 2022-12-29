@@ -46,6 +46,7 @@ Where `KEY` and `VALUE` pairs are environment variables that can be used to cust
 |NLP workflow for Azure ML|PyTorch* and Jupyter|[Training](./language_modeling/pytorch/bert_base/training/) \| [Inference](./language_modeling/pytorch/bert_base/inference/)|
 |Protein Structure Prediction|PyTorch*|[Inference](./protein-folding/pytorch/alphafold2/inference/)
 |Quantization Aware Training and Inference|OpenVINO™|[Quantization Aware Training(QAT)](https://github.com/intel/nlp-training-and-inference-openvino/tree/v1.0/question-answering-bert-qat)|
+|Ray Recommendation System|Ray with PyTorch*|[Training](./big-data/aiok-ray/training/) \| [Inference](./big-data/aiok-ray/inference)|
 |RecSys Challenge Analytics With Python|Hadoop and Spark|[Training](./analytics/classical-ml/recsys/training/)|
 |Video Streamer|TensorFlow|[Inference](./analytics/tensorflow/ssd_resnet34/inference/)|
 |Vision Based Transfer Learning|TensorFlow|[Training](./transfer_learning/tensorflow/resnet50/training/) \| [Inference](./transfer_learning/tensorflow/resnet50/inference/)|

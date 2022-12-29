@@ -113,12 +113,12 @@ This example demonstrates how to use BigDL Friesian to preprocess the Criteo dat
 End-to-End Recommendation Systems AI Workflow utilizing BigDL - Friesian. More information at [Intel Analytics - BigDL](https://github.com/intel-analytics/BigDL)
 
 ## Quick Start
-* * Pull and configure the dependent repo submodule 
+* Pull and configure the dependent repo submodule 
 ```
 git submodule update --init --recursive BigDL
 ```
 
-* Install [Pipeline Repository Dependencies](../../README.md)
+* Install [Pipeline Repository Dependencies](../../../README.md)
 
 * Other variables:
 

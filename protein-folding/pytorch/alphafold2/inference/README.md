@@ -1,4 +1,4 @@
-# **PyTorch AlphaFold2 INFERENCING - AI Drug Design**
+# **PyTorch AlphaFold2 INFERENCE - AI Drug Design**
 
 ## **Description**
 This document provides instructions on how to run inference pipeline of AlphaFold2 prediction of protein structures with make and docker compose. For bare metal instructions, please visit [Model Zoo for Intel® Architecture - AlphaFold2 Inference](https://github.com/IntelAI/models/tree/v2.9.0/quickstart/aidd/pytorch/alphafold2/inference)

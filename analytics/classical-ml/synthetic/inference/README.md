@@ -59,7 +59,7 @@ End2End AI Workflow utilizing a Flask dashboard to allow users to predict FMAX/I
 ## Quick Start
 * Pull and configure the dependent repo submodule `git submodule update --init --recursive`.
 
-* Install [Pipeline Repository Dependencies]()
+* Install [Pipeline Repository Dependencies](../../../../README.md)
 
 * Get the public IP address of your machine with either `ip a` or https://whatismyipaddress.com/
 

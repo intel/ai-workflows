@@ -41,10 +41,10 @@ Some users may prefer a docker installation do seperate the environment. Below s
 
 ```docker pull intel/ai-workflows:time-series-forecaster```
 
-Clone the BigDL repository to the current working directory and checkout the specific tag 
+Clone the BigDL repository to the current working directory and checkout the specific tag
 
 ```
-git clone https://github.com/intel-analytics/BigDL.git 
+git clone https://github.com/intel-analytics/BigDL.git
 cd BigDL
 git checkout ai-workflow
 ```
@@ -53,11 +53,11 @@ To run the pipeline, follow the instructions below outside of docker instance.
 
 ```
 docker run -it --rm -v ${PWD}:/workspace \
--w /workspace/BigDL/python/chronos/colab-notebook --init --net=host \
-intel/ai-workflows:time-series-forecaster \
-sh -c "jupyter nbconvert --to python chronos_nyc_taxi_tsdataset_forecaster.ipynb && sed '26,40d' \ chronos_nyc_taxi_tsdataset_forecaster.py \
-chronos_taxi_forecaster.py && \ 
-python chronos_taxi_forecaster.py"
+   -w /workspace/python/chronos/colab-notebook --init --net=host \
+   intel/ai-workflows:time-series-forecaster \
+   sh -c "jupyter nbconvert --to python chronos_nyc_taxi_tsdataset_forecaster.ipynb && \
+   sed '26,40d' chronos_nyc_taxi_tsdataset_forecaster.py > chronos_taxi_forecaster.py && \
+   python chronos_taxi_forecaster.py"
 ```
 
 ## Use-cases

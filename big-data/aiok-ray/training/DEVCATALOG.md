@@ -85,7 +85,7 @@ Memory Requirement: Minimum 250G
 | Criteo Full | 4500G |
 
 ### Dataset
-> Note: For kaggle run, train.csv and test.csv are required.
+> Note: For kaggle run, train.txt and test.txt are required.
 
 kaggle: https://go.criteo.net/criteo-research-kaggle-display-advertising-challenge-dataset.tar.gz
 

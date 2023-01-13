@@ -23,7 +23,7 @@ This document contains instructions on how to run hugging face DLSA e2e pipeline
 ```
 DATASET ?= sst2
 DATASET_DIR ?= /data
-FINAL_IMAGE_NAME ?= hugging-face-dlsa
+FINAL_IMAGE_NAME ?= document-level-sentiment-analysis
 MODEL ?= bert-large-uncased
 NAMESPACE ?= argo
 NUM_NODES ?= 2
@@ -50,7 +50,7 @@ argo-single-node:
 	--set workflow.model=${MODEL} \
 	--set workflow.process_per_node=${PROCESS_PER_NODE} \
 	${FINAL_IMAGE_NAME} ./chart
-	argo submit --from wftmpl/hugging-face-dlsa --namespace=${NAMESPACE}
+	argo submit --from wftmpl/${FINAL_IMAGE_NAME} --namespace=${NAMESPACE}
 
 workflow-log:
 	argo logs @latest -f
@@ -60,8 +60,8 @@ clean:
 	docker compose down
 
 helm-clean: 
-	kubectl delete wftmpl hugging-face-dlsa --namespace=${NAMESPACE}
-	helm uninstall hugging-face-dlsa --namespace=${NAMESPACE}
+	kubectl delete wftmpl ${FINAL_IMAGE_NAME} --namespace=${NAMESPACE}
+	helm uninstall ${FINAL_IMAGE_NAME} --namespace=${NAMESPACE}
 ```
 [_docker-compose.yml_](docker-compose.yml)
 ```
@@ -172,18 +172,35 @@ spec:
         name: workspace
       - mountPath: /output
         name: output-dir
+      {{- if eq .Values.dataset.type "nfs" }}
+      - mountPath: /workspace/profiling-transformers/datasets/{{ .Values.dataset.key }}
+        name: dataset
+        subPath: {{ .Values.dataset.nfs.subPath }}
+      {{ end }}
       workingDir: /workspace/profiling-transformers
+    {{- if eq .Values.dataset.type "s3" }}
     inputs: 
       artifacts:
       - name: dataset
         path: /workspace/profiling-transformers/datasets/{{ .Values.dataset.key }}
-        s3: 
-          key: {{ .Values.dataset.key }}
+        s3:
+          key: {{ .Values.dataset.datasetKey }}
+    {{ end }}
     name: hugging-face-dlsa-training
     outputs:
       artifacts: 
       - name: checkpoint
         path: /output
+        s3:
+          key: {{ .Values.dataset.logsKey }}
+    {{- if eq .Values.dataset.type "nfs" }}
+    volumes:
+    - name: dataset
+      nfs:
+        server: {{ .Values.dataset.nfs.server }}
+        path: {{ .Values.dataset.nfs.path }}
+        readOnly: {{ .Values.dataset.nfs.readOnly }}
+    {{ end }}
   volumeClaimTemplates:
   - metadata:
       name: workspace

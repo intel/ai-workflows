@@ -1,11 +1,17 @@
 metadata:
-  name: hugging-face-dlsa
+  name: document-level-sentiment-analysis
 
-kubernetesClusterDomain: cluster.local
 proxy: nil
 
 dataset:
-  key: sst
+  type: nfs
+  logsKey: nil
+  datasetKey: sst
+  nfs:
+    server: nil
+    path: nil
+    subPath: nil
+    readOnly: true
 
 workflow: 
   dataset: sst2
@@ -24,3 +30,4 @@ volumeClaimTemplates:
     resources:
       requests:
         storage: 1Gi
+

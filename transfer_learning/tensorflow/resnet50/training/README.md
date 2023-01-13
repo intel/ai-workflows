@@ -49,9 +49,10 @@ argo-single-node:
 	--set workflow.num_epochs=${NUM_EPOCHS} \
 	--set workflow.platform=${PLATFORM} \
 	--set workflow.precision=${PRECISION} \
+	--set workflow.dataset_dir=${DATASET_DIR} \
 	--set workflow.script=${SCRIPT} \
 	${FINAL_IMAGE_NAME} ./chart
-	argo submit --from wftmpl/vision-transfer-learning --namespace=${NAMESPACE}
+	argo submit --from wftmpl/${FINAL_IMAGE_NAME} --namespace=${NAMESPACE}
 
 workflow-log:
 	argo logs @latest -f -c output-log
@@ -60,8 +61,8 @@ clean:
 	docker compose down
 
 helm-clean: 
-	kubectl delete wftmpl vision-transfer-learning --namespace=${NAMESPACE}
-	helm uninstall vision-transfer-learning --namespace=${NAMESPACE}
+	kubectl delete wftmpl ${FINAL_IMAGE_NAME} --namespace=${NAMESPACE}
+	helm uninstall ${FINAL_IMAGE_NAME} --namespace=${NAMESPACE}
 ```
 [_docker-compose.yml_](docker-compose.yml)
 ```
@@ -107,6 +108,8 @@ spec:
       value: {{ .Values.workflow.ref }}
     - name: repo
       value: {{ .Values.workflow.repo }}
+    - name: dataset-dir
+      value: {{ .Values.workflow.dataset_dir }}
     - enum:
       - SPR
       - None
@@ -191,20 +194,26 @@ spec:
         name: workspace
       - mountPath: /output
         name: output-dir
+      {{- if eq .Values.dataset.type "nfs" }}
+      - mountPath: /dataset
+        name: dataset-dir
+      {{ end }}
       workingDir: /workspace
-    {{- if .Values.dataset.key }}
+    {{- if eq .Values.dataset.type "s3" }}
     inputs: 
       artifacts: 
       - name: dataset
         path: /dataset
-        s3: 
-          key: {{ .Values.dataset.key }}
+        s3:
+          key: {{ .Values.dataset.s3.datasetKey }}
     {{ end }}
     name: vision-transfer-learning-training
     outputs:
       artifacts: 
       - name: checkpoint
         path: /output
+        s3:
+          key: {{ .Values.dataset.logsKey }}
     sidecars:
     - args:
       - -c
@@ -216,6 +225,14 @@ spec:
       mirrorVolumeMounts: true
       name: output-log
       workingDir: /output
+    {{- if eq .Values.dataset.type "nfs" }}
+    volumes:
+    - name: dataset-dir
+      nfs:
+        server: {{ .Values.dataset.nfs.server }}
+        path: {{ .Values.dataset.nfs.path }}
+        readOnly: {{ .Values.dataset.nfs.readOnly }}
+    {{ end }}
   - container:
       args:
       - run
@@ -247,20 +264,26 @@ spec:
         name: workspace
       - mountPath: /output
         name: output-dir
+      {{- if eq .Values.dataset.type "nfs" }}
+      - mountPath: /dataset
+        name: dataset-dir
+      {{ end }}
       workingDir: /workspace
-    {{- if .Values.dataset.key }}
+    {{- if eq .Values.dataset.type "s3" }}
     inputs: 
       artifacts: 
       - name: dataset
         path: /dataset
         s3: 
-          key: {{ .Values.dataset.key }}
+          key: {{ .Values.dataset.s3.datasetKey }}
     {{ end }}
     name: vision-transfer-learning-inference
     outputs: 
       artifacts: 
       - name: logs
         path: /output/inference
+        s3:
+          key: {{ .Values.dataset.logsKey }}
     sidecars:
     - args:
       - -c
@@ -272,6 +295,14 @@ spec:
       mirrorVolumeMounts: true
       name: output-log
       workingDir: /output
+    {{- if eq .Values.dataset.type "nfs" }}
+    volumes:
+    - name: dataset-dir
+      nfs:
+        server: {{ .Values.dataset.nfs.server }}
+        path: {{ .Values.dataset.nfs.path }}
+        readOnly: {{ .Values.dataset.nfs.readOnly }}
+    {{ end }}
   volumeClaimTemplates:
   - metadata:
       name: workspace

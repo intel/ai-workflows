@@ -27,9 +27,10 @@ argo-single-node:
 	--set workflow.num_epochs=${NUM_EPOCHS} \
 	--set workflow.platform=${PLATFORM} \
 	--set workflow.precision=${PRECISION} \
+	--set workflow.dataset_dir=${DATASET_DIR} \
 	--set workflow.script=${SCRIPT} \
 	${FINAL_IMAGE_NAME} ./chart
-	argo submit --from wftmpl/vision-transfer-learning --namespace=${NAMESPACE}
+	argo submit --from wftmpl/${FINAL_IMAGE_NAME} --namespace=${NAMESPACE}
 
 workflow-log:
 	argo logs @latest -f -c output-log
@@ -38,5 +39,5 @@ clean:
 	docker compose down
 
 helm-clean: 
-	kubectl delete wftmpl vision-transfer-learning --namespace=${NAMESPACE}
-	helm uninstall vision-transfer-learning --namespace=${NAMESPACE}
+	kubectl delete wftmpl ${FINAL_IMAGE_NAME} --namespace=${NAMESPACE}
+	helm uninstall ${FINAL_IMAGE_NAME} --namespace=${NAMESPACE}

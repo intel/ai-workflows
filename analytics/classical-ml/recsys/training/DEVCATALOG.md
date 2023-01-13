@@ -44,8 +44,27 @@ To download the challenge dataset, please follow the instructions on the officia
 | Validation Dataset       | 1 csv file         | 6.8 GiB   | (17354112, 25)
 
 To make it easier for users to test the workflow, we include a python script to make synthetic data, which is under the path `src/data_loader`. You can use the following command to generate synthetic data:
+
+(Optional) Export related proxy into docker environment.
 ```bash
-python src/data_loader/generate_data.py --save_path [SAVE_DATA_PATH]
+export DOCKER_RUN_ENVS="-e ftp_proxy=${ftp_proxy} \
+  -e FTP_PROXY=${FTP_PROXY} -e http_proxy=${http_proxy} \
+  -e HTTP_PROXY=${HTTP_PROXY} -e https_proxy=${https_proxy} \
+  -e HTTPS_PROXY=${HTTPS_PROXY} -e no_proxy=${no_proxy} \
+  -e NO_PROXY=${NO_PROXY} -e socks_proxy=${socks_proxy} \
+  -e SOCKS_PROXY=${SOCKS_PROXY}"
+```
+
+```bash
+$ export DATASET_DIR=<Path to Dataset>
+$ docker run \
+  $DOCKER_RUN_ENVS \
+  --volume ${DATASET_DIR}:/mnt/data \
+  --volume $(pwd):/mnt \
+  --privileged --init -it --rm \
+  --workdir=/mnt \
+  intel/ai-workflows:analytics-with-python \
+  /bin/bash -c 'python3 src/data_loader/generate_data.py --save_path /mnt/data'
 ```
 
 ### **Docker**

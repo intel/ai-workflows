@@ -80,18 +80,35 @@ spec:
         name: workspace
       - mountPath: /output
         name: output-dir
+      {{- if eq .Values.dataset.type "nfs" }}
+      - mountPath: /workspace/profiling-transformers/datasets/{{ .Values.dataset.key }}
+        name: dataset
+        subPath: {{ .Values.dataset.nfs.subPath }}
+      {{ end }}
       workingDir: /workspace/profiling-transformers
+    {{- if eq .Values.dataset.type "s3" }}
     inputs: 
       artifacts:
       - name: dataset
         path: /workspace/profiling-transformers/datasets/{{ .Values.dataset.key }}
-        s3: 
-          key: {{ .Values.dataset.key }}
+        s3:
+          key: {{ .Values.dataset.datasetKey }}
+    {{ end }}
     name: hugging-face-dlsa-training
     outputs:
       artifacts: 
       - name: checkpoint
         path: /output
+        s3:
+          key: {{ .Values.dataset.logsKey }}
+    {{- if eq .Values.dataset.type "nfs" }}
+    volumes:
+    - name: dataset
+      nfs:
+        server: {{ .Values.dataset.nfs.server }}
+        path: {{ .Values.dataset.nfs.path }}
+        readOnly: {{ .Values.dataset.nfs.readOnly }}
+    {{ end }}
   volumeClaimTemplates:
   - metadata:
       name: workspace

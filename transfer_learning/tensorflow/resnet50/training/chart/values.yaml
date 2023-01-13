@@ -1,11 +1,11 @@
 metadata:
   name: vision-transfer-learning
 
-kubernetesClusterDomain: cluster.local
 proxy: nil
 workflow: 
   ref: v1.0.1
   repo: https://github.com/intel/vision-based-transfer-learning-and-inference
+  dataset_dir: /data
   platform: None
   precision: FP32
   script: colorectal
@@ -13,7 +13,14 @@ workflow:
   num_epochs: 100
 
 dataset:
-  key: false
+  type: s3
+  logsKey: nil
+  s3:
+    datasetKey: resisc45
+  nfs:
+    readOnly: true
+    server: nil
+    path: nil
 
 sidecars:
   image: ubuntu:20.04

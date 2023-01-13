@@ -1,10 +1,6 @@
 apiVersion: v2
-name: hugging-face-dlsa
+name: document-level-sentiment-analysis
 description: A Helm chart for Kubernetes
-dependencies: 
-- name: argo-workflows
-  version: 0.20.6
-  repository: https://argoproj.github.io/argo-helm
 # A chart can be either an 'application' or a 'library' chart.
 #
 # Application charts are a collection of templates that can be packaged into versioned archives

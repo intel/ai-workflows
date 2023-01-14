@@ -1,0 +1,6 @@
+# Adding Default CODEOWNERS
+*   jitendra.patil@intel.com srikanth.ramakrishna@intel.com sharvil.shah@intel.com ting.sheppy@intel.com tyler.titsworth@intel.com
+
+# Add code owners for DevCatalog READMEs anywhere
+**/DevCatalog.md    louie.tsai@intel.com marina.zubova@intel.com kyeong-ah.kate.jeong@intel.com isha.ghosh@intel.com david.b.kinder@intel.com anastasiya.ageeva@intel.com
+ 

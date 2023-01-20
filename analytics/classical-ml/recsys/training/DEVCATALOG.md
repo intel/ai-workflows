@@ -56,8 +56,8 @@ export DOCKER_RUN_ENVS="-e ftp_proxy=${ftp_proxy} \
 ```
 
 ```bash
-$ export DATASET_DIR=<Path to Dataset>
-$ docker run \
+export DATASET_DIR=<Path to Dataset>
+docker run \
   $DOCKER_RUN_ENVS \
   --volume ${DATASET_DIR}:/mnt/data \
   --volume $(pwd):/mnt \
@@ -117,13 +117,13 @@ docker run \
   --volume /${DATASET_DIR}:/mnt/data \
   --volume $(pwd)/tmp:/mnt \
   --volume $(pwd)/analytics-with-python/config:/mnt/config \
-  --volume $(pwd)/analytics-with-python:/mnt/code \
+  --volume $(pwd):/mnt/code \
   --privileged --init -it --rm \
   --workdir=/mnt/code \
-  recsys \
+  intel/ai-workflows:analytics-with-python \
   /bin/bash -c \
   "service ssh start && \
-  /mnt/code/run-all.sh"
+  /mnt/code/run-all.sh" 
 ```
 
 ##### Interactive Training

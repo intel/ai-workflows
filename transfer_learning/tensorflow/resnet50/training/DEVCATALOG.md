@@ -79,6 +79,43 @@ docker run \
   conda run --no-capture-output -n transfer_learning ./${SCRIPT}.sh
 ```
 
+#### Output
+```
+$ DATASET_DIR=/localdisk/aia_mlops_dataset/i5-transfer-learning/sports SCRIPT=sports make vision-transfer-learning
+[+] Building 0.1s (9/9) FINISHED                                                                                                                                                                          
+ => [internal] load build definition from Dockerfile.vision-transfer-learning                                                                                                                        0.0s
+ => => transferring dockerfile: 57B                                                                                                                                                                  0.0s
+ => [internal] load .dockerignore                                                                                                                                                                    0.0s
+ => => transferring context: 2B                                                                                                                                                                      0.0s
+ => [internal] load metadata for docker.io/library/ubuntu:20.04                                                                                                                                      0.0s
+ => [1/5] FROM docker.io/library/ubuntu:20.04                                                                                                                                                        0.0s
+ => CACHED [2/5] RUN apt-get update && apt-get install --no-install-recommends --fix-missing -y     build-essential     ca-certificates     git     gcc     numactl     wget                         0.0s
+ => CACHED [3/5] RUN apt-get update &&     wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh &&     bash miniconda.sh -b -p /opt/conda &&     rm m  0.0s
+ => CACHED [4/5] RUN conda create -y -n transfer_learning python=3.8 &&     source activate transfer_learning &&     conda install -y -c conda-forge gperftools &&     conda install -y intel-openm  0.0s
+ => CACHED [5/5] RUN mkdir -p /workspace/transfer-learning                                                                                                                                           0.0s
+ => exporting to image                                                                                                                                                                               0.0s
+ => => exporting layers                                                                                                                                                                              0.0s
+ => => writing image sha256:20fc21d79272d6af76735b20eb456bcf1a19019e8541e658292d3be60cb5b80f                                                                                                         0.0s
+ => => naming to docker.io/library/vision-transfer-learning:training-ww23-2022-ubuntu-20.04                                                                                                          0.0s
+WARN[0000] Found orphan containers ([hadoop-main]) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up. 
+[+] Running 1/1
+ ⠿ Container training-vision-transfer-learning-1  Recreated                                                                                                                                          0.1s
+Attaching to training-vision-transfer-learning-1
+training-vision-transfer-learning-1  | /usr/bin/bash: /opt/conda/envs/transfer_learning/lib/libtinfo.so.6: no version information available (required by /usr/bin/bash)
+training-vision-transfer-learning-1  | INFERENCE Default value is zero
+training-vision-transfer-learning-1  | WARNING:tensorflow:Please fix your imports. Module tensorflow.python.training.tracking.base has been moved to tensorflow.python.trackable.base. The old module will be deleted in version 2.11.
+training-vision-transfer-learning-1  | WARNING:tensorflow:Please fix your imports. Module tensorflow.python.training.checkpoint_management has been moved to tensorflow.python.checkpoint.checkpoint_management. The old module will be deleted in version 2.9.
+training-vision-transfer-learning-1  | WARNING:tensorflow:Please fix your imports. Module tensorflow.python.training.tracking.resource has been moved to tensorflow.python.trackable.resource. The old module will be deleted in version 2.11.
+training-vision-transfer-learning-1  | WARNING:tensorflow:Please fix your imports. Module tensorflow.python.training.tracking.util has been moved to tensorflow.python.checkpoint.checkpoint. The old module will be deleted in version 2.11.
+training-vision-transfer-learning-1  | WARNING:tensorflow:Please fix your imports. Module tensorflow.python.training.tracking.base_delegate has been moved to tensorflow.python.trackable.base_delegate. The old module will be deleted in version 2.11.
+training-vision-transfer-learning-1  | WARNING:tensorflow:Please fix your imports. Module tensorflow.python.training.tracking.graph_view has been moved to tensorflow.python.checkpoint.graph_view. The old module will be deleted in version 2.11.
+training-vision-transfer-learning-1  | WARNING:tensorflow:Please fix your imports. Module tensorflow.python.training.tracking.python_state has been moved to tensorflow.python.trackable.python_state. The old module will be deleted in version 2.11.
+training-vision-transfer-learning-1  | WARNING:tensorflow:Please fix your imports. Module tensorflow.python.training.saving.functional_saver has been moved to tensorflow.python.checkpoint.functional_saver. The old module will be deleted in version 2.11.
+training-vision-transfer-learning-1  | WARNING:tensorflow:Please fix your imports. Module tensorflow.python.training.saving.checkpoint_options has been moved to tensorflow.python.checkpoint.checkpoint_options. The old module will be deleted in version 2.11.
+training-vision-transfer-learning-1  | 2022-08-30 16:18:31.273775: I tensorflow/core/common_runtime/process_util.cc:146] Creating new thread pool with default inter op setting: 2. Tune using inter_op_parallelism_threads for best performance.
+training-vision-transfer-learning-1 exited with code 0
+```
+
 ### **Bare Metal**
 Below setup and how-to-run sessions are for users who want to use bare metal environment.  
 For docker environment, please go to [docker session](#docker).

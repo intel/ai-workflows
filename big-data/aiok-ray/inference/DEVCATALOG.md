@@ -72,6 +72,80 @@ docker run \
 ```
 ------
 
+#### Output
+```
+$ DATASET_DIR=/localdisk/sharvils/data/criteo_kaggle/ CHECKPOINT_DIR=.output/ RUN_MODE=kaggle make recommendation-ray
+
+ => [internal] load build definition from DockerfilePytorch                                                                            0.0s
+ => => transferring dockerfile: 39B                                                                                                    0.0s
+ => [internal] load .dockerignore                                                                                                      0.0s
+ => => transferring context: 2B                                                                                                        0.0s
+ => [internal] load metadata for docker.io/library/ubuntu:18.04                                                                        0.3s
+ => [internal] load build context                                                                                                      0.0s
+ => => transferring context: 68B                                                                                                       0.0s
+ => [ 1/40] FROM docker.io/library/ubuntu:18.04@sha256:daf3e62183e8aa9a56878a685ed26f3af3dd8c08c8fd11ef1c167a1aa9bd66a3                0.0s
+ => CACHED [ 2/40] WORKDIR /root/                                                                                                      0.0s
+ => CACHED [ 3/40] RUN apt-get update -y && apt-get upgrade -y && apt-get install -y openjdk-8-jre build-essential cmake wget curl gi  0.0s
+ => CACHED [ 4/40] COPY miniconda.sh .                                                                                                 0.0s
+ => CACHED [ 5/40] COPY spark-env.sh .                                                                                                 0.0s
+ => CACHED [ 6/40] RUN ls ~/                                                                                                           0.0s
+ => CACHED [ 7/40] RUN /bin/bash ~/miniconda.sh -b -p /opt/intel/oneapi/intelpython/latest                                             0.0s
+ => CACHED [ 8/40] RUN yes | conda create -n pytorch_mlperf python=3.7                                                                 0.0s
+ => CACHED [ 9/40] RUN conda install gxx_linux-64==8.4.0                                                                               0.0s
+ => CACHED [10/40] RUN cp /opt/intel/oneapi/intelpython/latest/lib/python3.7/_sysconfigdata_x86_64_conda_cos6_linux_gnu.py /opt/intel  0.0s
+ => CACHED [11/40] RUN cp /opt/intel/oneapi/intelpython/latest/envs/pytorch_mlperf/lib/python3.7/_sysconfigdata_x86_64_conda_cos6_lin  0.0s
+ => CACHED [12/40] RUN cp -r /opt/intel/oneapi/intelpython/latest/envs/pytorch_mlperf/lib/* /opt/intel/oneapi/intelpython/latest/envs  0.0s
+ => CACHED [13/40] RUN python -m pip install sklearn onnx tqdm lark-parser pyyaml                                                      0.0s
+ => CACHED [14/40] RUN conda install ninja cffi typing --no-update-deps                                                                0.0s
+ => CACHED [15/40] RUN conda install intel-openmp mkl mkl-include numpy -c intel --no-update-deps                                      0.0s
+ => CACHED [16/40] RUN conda install -c conda-forge gperftools                                                                         0.0s
+ => CACHED [17/40] RUN git clone https://github.com/pytorch/pytorch.git && cd pytorch && git checkout tags/v1.5.0-rc3 -b v1.5-rc3 &&   0.0s
+ => CACHED [18/40] RUN git clone https://github.com/intel/intel-extension-for-pytorch.git && cd intel-extension-for-pytorch && git ch  0.0s
+ => CACHED [19/40] RUN cd intel-extension-for-pytorch && cp torch_patches/0001-enable-Intel-Extension-for-CPU-enable-CCL-backend.patc  0.0s
+ => CACHED [20/40] RUN cp -r /opt/intel/oneapi/intelpython/latest/envs/pytorch_mlperf/lib/* /opt/intel/oneapi/intelpython/latest/envs  0.0s
+ => CACHED [21/40] RUN cd pytorch && python setup.py install                                                                           0.0s
+ => CACHED [22/40] RUN cd intel-extension-for-pytorch && python setup.py install                                                       0.0s
+ => CACHED [23/40] RUN git clone https://github.com/oneapi-src/oneCCL.git && cd oneCCL && git checkout 2021.1-beta07-1 && mkdir build  0.0s
+ => CACHED [24/40] RUN git clone https://github.com/intel/torch-ccl.git && cd torch-ccl && git checkout 2021.1-beta07-1                0.0s
+ => CACHED [25/40] RUN source /opt/intel/oneapi/intelpython/latest/envs/pytorch_mlperf/.local/env/setvars.sh && cd torch-ccl && pytho  0.0s
+ => CACHED [26/40] RUN python -m pip install --no-cache-dir --ignore-installed sigopt==7.5.0 pandas pytest prefetch_generator tensorb  0.0s
+ => CACHED [27/40] RUN python -m pip install "git+https://github.com/mlperf/logging.git@1.0.0"                                         0.0s
+ => CACHED [28/40] RUN pip install ray==2.1.0 raydp-nightly pyrecdp pandas scikit-learn "pyarrow<7.0.0"                                0.0s
+ => CACHED [29/40] RUN apt-get update -y && apt-get install -y openssh-server pssh sshpass vim                                         0.0s
+ => CACHED [30/40] RUN sed -i 's/#Port 22/Port 12346/g' /etc/ssh/sshd_config                                                           0.0s
+ => CACHED [31/40] RUN sed -i 's/#   Port 22/    Port 12346/g' /etc/ssh/ssh_config                                                     0.0s
+ => CACHED [32/40] RUN echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config                                                              0.0s
+ => CACHED [33/40] RUN conda init bash                                                                                                 0.0s
+ => CACHED [34/40] RUN echo "source /opt/intel/oneapi/intelpython/latest/envs/pytorch_mlperf/.local/env/setvars.sh" >> /etc/bash.bash  0.0s
+ => CACHED [35/40] RUN echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/intel/oneapi/intelpython/latest/envs/pytorch_mlperf/lib/pyt  0.0s
+ => CACHED [36/40] RUN echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/intel/oneapi/intelpython/latest/envs/pytorch_mlperf/lib/pyt  0.0s
+ => CACHED [37/40] RUN echo "source ~/spark-env.sh" >> /etc/bash.bashrc                                                                0.0s
+ => CACHED [38/40] RUN echo "KMP_BLOCKTIME=1" >> /etc/bash.bashrc                                                                      0.0s
+ => CACHED [39/40] RUN echo "KMP_AFFINITY="granularity=fine,compact,1,0"" >> /etc/bash.bashrc                                          0.0s
+ => CACHED [40/40] RUN echo "root:docker" | chpasswd                                                                                   0.0s
+ => exporting to image                                                                                                                 0.0s
+ => => exporting layers                                                                                                                0.0s
+ => => writing image sha256:740242ef084e164945902d271a7edf9291015b5a3ad9fa79b8527e452ece03b3                                           0.0s
+ => => naming to docker.io/library/recommendation-ray:training-inference-ubuntu-18.04                                                  0.0s
+[+] Running 1/1
+ ⠿ Container ray-inference  Created                                                                                                    0.1s
+Attaching to ray-inference
+ray-inference  | check cmd
+ray-inference  | check dataset
+ray-inference  | check data path: /home/vmagent/app/dataset/criteo
+ray-inference  | check kaggle dataset
+```
+...
+```
+ray-inference  | [1] Start inference==========================:
+ray-inference  | [0] Start inference==========================:
+ray-inference  | [1]  loss 0.462588, auc 0.7900 accuracy 78.372 %
+ray-inference  | [1] Test time:1.955101728439331
+ray-inference  | [1] Total results length:3274330
+ray-inference  | [0]  loss 0.462588, auc 0.7900 accuracy 78.372 %
+ray-inference  | inference time is 27 seconds.
+```
+
 ## Useful Resources
 
 ## Recommended Hardware and OS

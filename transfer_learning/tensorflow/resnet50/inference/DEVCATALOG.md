@@ -83,6 +83,53 @@ docker run \
   conda run --no-capture-output -n transfer_learning ./${SCRIPT}.sh --inference -cp "/workspace/checkpoint"
 ```
 
+#### Output
+```
+$ PLATFORM=SPR make vision-transfer-learning
+[+] Building 2.0s (9/9) FINISHED
+ => [internal] load build definition from Dockerfile.vision-transfer-learning                                                                                                                        0.0s
+ => => transferring dockerfile: 2.36kB                                                                                                                                                               0.0s
+ => [internal] load .dockerignore                                                                                                                                                                    0.0s
+ => => transferring context: 2B                                                                                                                                                                      0.0s
+ => [internal] load metadata for docker.io/library/ubuntu:20.04                                                                                                                                      0.0s
+ => [1/5] FROM docker.io/library/ubuntu:20.04                                                                                                                                                        0.0s
+ => CACHED [2/5] RUN apt-get update && apt-get install --no-install-recommends --fix-missing -y     build-essential     ca-certificates     git     gcc     numactl     wget                         0.0s
+ => CACHED [3/5] RUN apt-get update &&     wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh &&     bash miniconda.sh -b -p /opt/conda &&     rm m  0.0s
+ => CACHED [4/5] RUN conda create -y -n transfer_learning python=3.8 &&     source activate transfer_learning &&     conda install -y -c conda-forge gperftools &&     conda install -y intel-openm  0.0s
+ => [5/5] RUN mkdir -p /workspace/transfer-learning                                                                                                                                                  1.8s
+ => exporting to image                                                                                                                                                                               0.0s 
+ => => exporting layers                                                                                                                                                                              0.0s
+ => => writing image sha256:15de220251a06ec9098c458f43c21239f1811fd5bc563bf99f322721960a717b                                                                                                         0.0s
+ => => naming to docker.io/library/vision-transfer-learning:inference-23-2022-ubuntu-20.04                                                                                                           0.0s
+
+Use 'docker scan' to run Snyk tests against images to find vulnerabilities and learn how to fix them
+[+] Running 1/0
+ ⠿ Container inference-vision-transfer-learning-1  Recreated                                                                                                                                         0.1s
+Attaching to inference-vision-transfer-learning-1
+inference-vision-transfer-learning-1  | /usr/bin/bash: /opt/conda/envs/transfer_learning/lib/libtinfo.so.6: no version information available (required by /usr/bin/bash)
+inference-vision-transfer-learning-1  | INFERENCE Default value is zero
+inference-vision-transfer-learning-1  | Inference option is : 1
+inference-vision-transfer-learning-1  | Checkpoint File is : /workspace/checkpoint
+inference-vision-transfer-learning-1  | Platform is SPR
+inference-vision-transfer-learning-1  | 2022-08-25 17:59:38.778284: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX512_VNNI AVX512_BF16 AVX_VNNI AMX_TILE AMX_INT8 AMX_BF16
+```
+...
+```
+inference-vision-transfer-learning-1  | OMP: Info #255: KMP_AFFINITY: pid 22 tid 550 thread 100 bound to OS proc set 44
+inference-vision-transfer-learning-1  | OMP: Info #255: KMP_AFFINITY: pid 22 tid 551 thread 101 bound to OS proc set 45
+inference-vision-transfer-learning-1  | OMP: Info #255: KMP_AFFINITY: pid 22 tid 552 thread 102 bound to OS proc set 46
+inference-vision-transfer-learning-1  | OMP: Info #255: KMP_AFFINITY: pid 22 tid 553 thread 103 bound to OS proc set 47
+inference-vision-transfer-learning-1  | OMP: Info #255: KMP_AFFINITY: pid 22 tid 554 thread 104 bound to OS proc set 48
+inference-vision-transfer-learning-1  | OMP: Info #255: KMP_AFFINITY: pid 22 tid 555 thread 105 bound to OS proc set 49
+inference-vision-transfer-learning-1  | OMP: Info #255: KMP_AFFINITY: pid 22 tid 556 thread 106 bound to OS proc set 50
+inference-vision-transfer-learning-1  | OMP: Info #255: KMP_AFFINITY: pid 22 tid 557 thread 107 bound to OS proc set 51
+inference-vision-transfer-learning-1  | OMP: Info #255: KMP_AFFINITY: pid 22 tid 558 thread 108 bound to OS proc set 52
+inference-vision-transfer-learning-1  | OMP: Info #255: KMP_AFFINITY: pid 22 tid 559 thread 109 bound to OS proc set 53
+inference-vision-transfer-learning-1  | OMP: Info #255: KMP_AFFINITY: pid 22 tid 560 thread 110 bound to OS proc set 54
+inference-vision-transfer-learning-1  | OMP: Info #255: KMP_AFFINITY: pid 22 tid 561 thread 111 bound to OS proc set 55
+inference-vision-transfer-learning-1 exited with code 0
+```
+
 ### **Bare Metal**
 Below setup and how-to-run sessions are for users who want to use bare metal environment.  
 For docker environment, please go to [docker session](#docker).
